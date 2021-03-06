@@ -2,6 +2,7 @@ import { getDataFromApi, addTaskToApi } from './data';
 import { POMODORO_BREAK, POMODORO_WORK } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
 
+import TaskItem from './components/TaskItem';
 class PomodoroApp {
   constructor(options) {
     let {
@@ -24,21 +25,15 @@ class PomodoroApp {
     this.breakInterval = null;
   }
 
-  addTask(task) {
-    addTaskToApi(task)
-      .then((data) => data.json())
-      .then((newTask) => {
-        this.data = [...this.data, newTask];
-        this.addTaskToTable(newTask);
-      });
+  async addTask(task) {
+    const newTask = await addTaskToApi(task);
+    newTask && this.$tableTbody.appendChild(TaskItem(newTask));
+    this.data = [...this.data, newTask];
   }
 
-  addTaskToTable(task, index) {
-    const $newTaskEl = document.createElement('tr');
-    $newTaskEl.setAttribute('data-taskId', `task${task.id}`);
-    $newTaskEl.classList.add('task');
-    $newTaskEl.innerHTML = `<th scope="row">${task.id}</th><td>${task.title}</td>`;
-    this.$tableTbody.appendChild($newTaskEl);
+  addTaskToTable(task) {
+    const newTaskItem = TaskItem(task);
+    this.$tableTbody.appendChild(newTaskItem);
     this.$taskFormInput.value = '';
   }
 
@@ -50,35 +45,36 @@ class PomodoroApp {
     });
   }
 
-  fillTasksTable() {
-    getDataFromApi().then((currentTasks) => {
-      this.data = currentTasks;
-      currentTasks.forEach((task, index) => {
-        this.addTaskToTable(task, index + 1);
-      });
+  async fillTasksTable() {
+    const currentTasks = await getDataFromApi();
+    currentTasks.forEach((task, index) => {
+      this.addTaskToTable(task, index + 1);
     });
+
+    this.data = currentTasks;
   }
 
   initializeTimer(endTime) {
     this.currentInterval = setInterval(() => {
-      const remainingTime = getTimeRemaining(endTime);
-      const { total, minutes, seconds } = remainingTime;
+      const { total, minutes, seconds } = getTimeRemaining(endTime);
+
       this.currentRemaining = total;
       this.$timerEl.innerHTML = minutes + ':' + seconds;
+
       if (total <= 0) {
         clearInterval(this.currentInterval);
+
         this.currentTask.completed = true;
+
         const now = getNow();
         const breakEndDate = addMinutes(now, POMODORO_BREAK);
+
         this.breakInterval = setInterval(() => {
-          const remainingBreakTime = getTimeRemaining(breakEndDate);
-          const { total, minutes, seconds } = remainingBreakTime;
-          this.$timerEl.innerHTML =
-            'Chill: ' +
-            remainingBreakTime.minutes +
-            ':' +
-            remainingBreakTime.seconds;
-          if (remainingBreakTime.total <= 0) {
+          const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
+
+          this.$timerEl.innerHTML = 'Chill: ' + minutes + ':' + seconds;
+
+          if (total <= 0) {
             clearInterval(this.breakInterval);
             this.createNewTimer();
           }
@@ -90,10 +86,13 @@ class PomodoroApp {
   setActiveTask() {
     const allTasks = document.querySelectorAll('.task');
     allTasks.forEach(($taskItem) => ($taskItem.style.background = '#fff'));
+
     this.currentTask = this.data.find((task) => !task.completed);
+
     const targetEl = document.querySelector(
       `tr[data-taskId = 'task${this.currentTask.id}']`
     );
+
     targetEl.style.background = 'red';
   }
 

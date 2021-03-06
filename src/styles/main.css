@@ -1,27 +1,94 @@
-.spacing {
-    padding: 15px 0;
+:root {
+  --c-danger: #dc3545;
 }
 
+.spacing {
+  padding: 15px 0;
+}
 
 .instructions h3 {
-    text-align: center;
+  text-align: center;
 }
 
 .instructions ol {
-    width: 40%;
-    margin: 0 auto;
+  width: 40%;
+  margin: 0 auto;
 }
 
 .timer {
-    text-align: center;
-    font-weight: bold;
-    font-size: 80px;
+  text-align: center;
+  font-weight: bold;
+  font-size: 80px;
 }
 
 .action-buttons {
-    text-align: center;
+  text-align: center;
 }
 
 .action-buttons .btn + .btn {
-    margin-left: 15px;
+  margin-left: 15px;
+}
+
+.trash-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  float: right;
+  background: var(--c-danger);
+}
+
+.trash-icon > svg {
+  color: white;
+  width: 12px;
+  height: 12px;
+  margin-bottom: 2px;
+}
+
+.trash-icon:hover {
+  transform: scale(1.1);
+}
+
+.activeTask {
+  background: red;
+}
+
+.completedTask {
+  text-decoration: line-through;
+}
+
+.trash-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  float: right;
+  background: var(--c-danger);
+}
+
+.trash-icon:hover {
+  transform: scale(1.1);
+}
+.trash-icon > svg {
+  color: white;
+  width: 12px;
+  height: 12px;
+  margin-bottom: 2px;
+}
+
+button {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.hidden {
+  display: none;
+}
+
+body {
+  counter-reset: table-row;
+}
+.tr-counter::before {
+  counter-increment: table-row;
+  content: counter(table-row);
 }
