@@ -1,4 +1,4 @@
-import { getDataFromApi, addTaskToApi } from './data';
+import { getDataFromApi, addTaskToApi, updateTaskFromApi } from './data';
 import { POMODORO_BREAK, POMODORO_WORK } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
 
@@ -25,10 +25,30 @@ class PomodoroApp {
     this.breakInterval = null;
   }
 
+  disableTaskForm() {
+    this.$taskFormInput.value = 'Ekleniyor...';
+    this.$taskFormBtn.innerHTML = 'Ekleniyor...';
+
+    this.$taskFormInput.disabled = true;
+    this.$taskFormBtn.disabled = true;
+  }
+  enableTaskForm() {
+    this.$taskFormInput.disabled = false;
+    this.$taskFormBtn.disabled = false;
+
+    this.$taskFormInput.value = '';
+    this.$taskFormBtn.innerHTML = 'Add Task';
+  }
+
   async addTask(task) {
+    this.disableTaskForm();
+
     const newTask = await addTaskToApi(task);
     newTask && this.$tableTbody.appendChild(TaskItem(newTask));
+
     this.data = [...this.data, newTask];
+
+    this.enableTaskForm();
   }
 
   addTaskToTable(task) {
@@ -54,35 +74,6 @@ class PomodoroApp {
     this.data = currentTasks;
   }
 
-  initializeTimer(endTime) {
-    this.currentInterval = setInterval(() => {
-      const { total, minutes, seconds } = getTimeRemaining(endTime);
-
-      this.currentRemaining = total;
-      this.$timerEl.innerHTML = minutes + ':' + seconds;
-
-      if (total <= 0) {
-        clearInterval(this.currentInterval);
-
-        this.currentTask.completed = true;
-
-        const now = getNow();
-        const breakEndDate = addMinutes(now, POMODORO_BREAK);
-
-        this.breakInterval = setInterval(() => {
-          const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
-
-          this.$timerEl.innerHTML = 'Chill: ' + minutes + ':' + seconds;
-
-          if (total <= 0) {
-            clearInterval(this.breakInterval);
-            this.createNewTimer();
-          }
-        }, 1000);
-      }
-    }, 1000);
-  }
-
   setActiveTask() {
     const allTasks = document.querySelectorAll('.task');
     allTasks.forEach(($taskItem) => ($taskItem.style.background = '#fff'));
@@ -94,6 +85,36 @@ class PomodoroApp {
     );
 
     targetEl.style.background = 'red';
+  }
+
+  initializeTimer(endTime) {
+    this.currentInterval = setInterval(() => {
+      const { total, minutes, seconds } = getTimeRemaining(endTime);
+
+      this.currentRemaining = total;
+      this.$timerEl.innerHTML = `Working on ${this.currentTask.title} - ${minutes}:${seconds}`;
+
+      if (total <= 0) {
+        clearInterval(this.currentInterval);
+
+        this.currentTask.completed = true;
+        updateTaskFromApi(this.currentTask);
+
+        const now = getNow();
+        const breakEndDate = addMinutes(now, POMODORO_BREAK);
+
+        this.breakInterval = setInterval(() => {
+          const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
+
+          this.$timerEl.innerHTML = `Chill - ${minutes}:${seconds}`;
+
+          if (total <= 0) {
+            clearInterval(this.breakInterval);
+            this.createNewTimer();
+          }
+        }, 1000);
+      }
+    }, 1000);
   }
 
   createNewTimer() {

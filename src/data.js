@@ -11,10 +11,8 @@ const fetcher = async (url, method = 'get', body = null) => {
     if (response.status >= 200 || response.status <= 299)
       return await response.json();
 
-    console.log(response);
     alert('Something went wrong, Please Try Again');
   } catch (error) {
-    console.log(error);
     alert('Something went wrong, Please Try Again');
     return null;
   }
@@ -32,8 +30,12 @@ export const deleteTaskFromApi = async (id) => {
   return await fetcher(`${TASKS_API_BASE_URL}/${id}`, 'delete');
 };
 
-export const updateTaskFromApi = async (id, task) => {
-  return await fetcher(`${TASKS_API_BASE_URL}/${id}`, 'put', task);
+export const updateTaskFromApi = async (task) => {
+  return await fetcher(
+    `${TASKS_API_BASE_URL}/${task.id}`,
+    'put',
+    JSON.stringify(task)
+  );
 };
 
 const defaultFetchHeaders = {
