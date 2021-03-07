@@ -26,7 +26,7 @@ const TaskItem = (task) => {
   const $trElement = document.createElement('tr');
 
   $trElement.setAttribute('data-taskId', `task${task.id}`);
-  $trElement.classList.add('task');
+  $trElement.classList.add(task.completed ? 'completedTask' : 'task');
 
   $trElement.innerHTML = `
   <th scope="row" class="tr-counter"></th>

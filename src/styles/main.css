@@ -18,7 +18,7 @@
 .timer {
   text-align: center;
   font-weight: bold;
-  font-size: 80px;
+  font-size: 48px;
 }
 
 .action-buttons {
@@ -54,6 +54,7 @@
 
 .completedTask {
   text-decoration: line-through;
+  background: rgb(240, 240, 240);
 }
 
 button {
