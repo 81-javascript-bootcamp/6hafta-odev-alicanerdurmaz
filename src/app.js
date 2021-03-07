@@ -1,5 +1,5 @@
 import { updateTaskFromApi } from './data';
-import { POMODORO_BREAK, POMODORO_WORK } from './constans';
+import { POMODORO_BREAK, POMODORO_WORK, POMODORO_SESSIONS } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
 
 import TaskForm from './components/TaskForm';
@@ -18,6 +18,11 @@ class PomodoroApp {
     } = options;
 
     this.data = [];
+
+    this.pomodoroState = {
+      pomodoroCount: 0,
+      session: POMODORO_SESSIONS.notStarted,
+    };
 
     this.$taskList = document.querySelector(taskListSelector);
     this.$taskForm = document.querySelector(taskFormSelector);
@@ -56,24 +61,8 @@ class PomodoroApp {
       this.$timerEl.innerHTML = `Working on ${this.currentTask.title} - ${minutes}:${seconds}`;
 
       if (total <= 0) {
-        clearInterval(this.currentInterval);
-
-        this.currentTask.completed = true;
-        updateTaskFromApi(this.currentTask);
-
-        const now = getNow();
-        const breakEndDate = addMinutes(now, POMODORO_BREAK);
-
-        this.breakInterval = setInterval(() => {
-          const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
-
-          this.$timerEl.innerHTML = `Chill - ${minutes}:${seconds}`;
-
-          if (total <= 0) {
-            clearInterval(this.breakInterval);
-            this.createNewTimer();
-          }
-        }, 1000);
+        this.endPomdoroSession();
+        this.startPomodoroBreak();
       }
     }, 1000);
   }
@@ -83,6 +72,31 @@ class PomodoroApp {
     const endDate = addMinutes(now, POMODORO_WORK);
     this.initializeTimer(endDate);
     this.setActiveTask();
+  }
+
+  endPomdoroSession() {
+    clearInterval(this.currentInterval);
+
+    this.currentTask.completed = true;
+    updateTaskFromApi(this.currentTask);
+
+    this.pomodoroState.pomodoroCount++;
+  }
+
+  startPomodoroBreak() {
+    const now = getNow();
+    const breakEndDate = addMinutes(now, POMODORO_BREAK);
+
+    this.breakInterval = setInterval(() => {
+      const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
+
+      this.$timerEl.innerHTML = `Chill - ${minutes}:${seconds}`;
+
+      if (total <= 0) {
+        clearInterval(this.breakInterval);
+        this.createNewTimer();
+      }
+    }, 1000);
   }
 
   handleStart() {
