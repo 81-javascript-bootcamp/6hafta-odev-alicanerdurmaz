@@ -1,6 +1,7 @@
 import { updateTaskFromApi } from './data';
 import { POMODORO_BREAK, POMODORO_WORK, POMODORO_SESSIONS } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
+import { zeroPrefixForNumbers } from './helpers/zeroPrefixForNumbers';
 
 import TaskForm from './components/TaskForm';
 import useTaskResource from './hooks/useTaskResource';
@@ -58,7 +59,12 @@ class PomodoroApp {
       const { total, minutes, seconds } = getTimeRemaining(endTime);
 
       this.currentRemaining = total;
-      this.$timerEl.innerHTML = `Working on ${this.currentTask.title} - ${minutes}:${seconds}`;
+
+      this.updateTimerTitle(
+        `Working on ${this.currentTask.title} - ${zeroPrefixForNumbers(
+          minutes
+        )}:${zeroPrefixForNumbers(seconds)}`
+      );
 
       if (total <= 0) {
         this.endPomdoroSession();
@@ -90,7 +96,11 @@ class PomodoroApp {
     this.breakInterval = setInterval(() => {
       const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
 
-      this.$timerEl.innerHTML = `Chill - ${minutes}:${seconds}`;
+      this.updateTimerTitle(
+        `Chill - ${zeroPrefixForNumbers(minutes)}:${zeroPrefixForNumbers(
+          seconds
+        )}`
+      );
 
       if (total <= 0) {
         clearInterval(this.breakInterval);
@@ -135,6 +145,10 @@ class PomodoroApp {
       this.$pauseButton.classList.add('disabledButton');
       this.$pauseButton.disabled = true;
     }
+  }
+
+  updateTimerTitle(text) {
+    this.$timerEl.innerHTML = text;
   }
 
   init() {
