@@ -30,9 +30,9 @@
 }
 
 .trash-icon {
+  border-radius: 4px;
   width: 24px;
   height: 24px;
-  border-radius: 50%;
   float: right;
   background: var(--c-danger);
 }
@@ -54,24 +54,6 @@
 
 .completedTask {
   text-decoration: line-through;
-}
-
-.trash-icon {
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  float: right;
-  background: var(--c-danger);
-}
-
-.trash-icon:hover {
-  transform: scale(1.1);
-}
-.trash-icon > svg {
-  color: white;
-  width: 12px;
-  height: 12px;
-  margin-bottom: 2px;
 }
 
 button {
