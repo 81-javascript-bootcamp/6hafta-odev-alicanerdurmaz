@@ -75,3 +75,9 @@ body {
   counter-increment: table-row;
   content: counter(table-row);
 }
+
+.disabledButton {
+  opacity: 0.8;
+  cursor: unset;
+  pointer-events: none;
+}

@@ -27,11 +27,11 @@ class PomodoroApp {
     this.$startButton = document.querySelector(startButtonSelector);
     this.$pauseButton = document.querySelector(pauseButtonSelector);
 
+    this.currentTask = null;
+
     this.$timerEl = document.querySelector(timerSelector);
     this.currentInterval = null;
     this.currentRemaining = null;
-    this.currentTask = null;
-
     this.breakInterval = null;
   }
 
@@ -88,19 +88,39 @@ class PomodoroApp {
   handleStart() {
     this.$startButton.addEventListener('click', () => {
       const now = getNow();
+
       if (this.currentRemaining) {
         const remaining = new Date(now.getTime() + this.currentRemaining);
         this.initializeTimer(remaining);
       } else {
         this.createNewTimer();
       }
+
+      this.toggleStartPauseButtons('start');
     });
   }
 
   handlePause() {
     this.$pauseButton.addEventListener('click', () => {
       clearInterval(this.currentInterval);
+      this.toggleStartPauseButtons('pause');
     });
+  }
+
+  toggleStartPauseButtons(button) {
+    if (button === 'start') {
+      this.$startButton.classList.add('disabledButton');
+      this.$startButton.disabled = true;
+
+      this.$pauseButton.classList.remove('disabledButton');
+      this.$pauseButton.disabled = false;
+    } else {
+      this.$startButton.classList.remove('disabledButton');
+      this.$startButton.disabled = false;
+
+      this.$pauseButton.classList.add('disabledButton');
+      this.$pauseButton.disabled = true;
+    }
   }
 
   init() {
