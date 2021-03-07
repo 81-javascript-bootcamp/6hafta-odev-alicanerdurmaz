@@ -10,6 +10,8 @@ let pomodoroApp = new PomodoroApp({
   startButtonSelector: '#start',
   pauseButtonSelector: '#pause',
   timerSelector: '#timer',
+  timerButtonsSelector: '#timer-buttons',
+  skipButtonSelector: '#skip',
 });
 
 pomodoroApp.init();

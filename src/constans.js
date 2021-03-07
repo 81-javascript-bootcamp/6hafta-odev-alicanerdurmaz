@@ -6,6 +6,8 @@ export const POMODORO_BREAK = 0.1;
 export const POMODORO_SESSIONS = {
   notStarted: null,
   working: 1,
-  break: 2,
-  longBreak: 3,
+  pause: 2,
+  breakPause: 3,
+  break: 4,
+  longBreak: 5,
 };
