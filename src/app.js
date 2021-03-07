@@ -1,77 +1,38 @@
-import { getDataFromApi, addTaskToApi, updateTaskFromApi } from './data';
+import { updateTaskFromApi } from './data';
 import { POMODORO_BREAK, POMODORO_WORK } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
 
-import TaskItem from './components/TaskItem';
+import TaskForm from './components/TaskForm';
+import useTaskResource from './hooks/useTaskResource';
+
 class PomodoroApp {
   constructor(options) {
     let {
-      tableTbodySelector,
+      taskListSelector,
       taskFormSelector,
       startButtonSelector,
       timerSelector,
       pauseButtonSelector,
+      taskFormButton,
+      taskFormInput,
     } = options;
+
     this.data = [];
-    this.$tableTbody = document.querySelector(tableTbodySelector);
+
+    this.$taskList = document.querySelector(taskListSelector);
     this.$taskForm = document.querySelector(taskFormSelector);
-    this.$taskFormInput = this.$taskForm.querySelector('input');
+    this.$taskFormInput = this.$taskForm.querySelector(taskFormInput);
+    this.$taskFormButton = this.$taskForm.querySelector(taskFormButton);
+
     this.$startButton = document.querySelector(startButtonSelector);
     this.$pauseButton = document.querySelector(pauseButtonSelector);
+
     this.$timerEl = document.querySelector(timerSelector);
     this.currentInterval = null;
     this.currentRemaining = null;
     this.currentTask = null;
+
     this.breakInterval = null;
-  }
-
-  disableTaskForm() {
-    this.$taskFormInput.value = 'Ekleniyor...';
-    this.$taskFormBtn.innerHTML = 'Ekleniyor...';
-
-    this.$taskFormInput.disabled = true;
-    this.$taskFormBtn.disabled = true;
-  }
-  enableTaskForm() {
-    this.$taskFormInput.disabled = false;
-    this.$taskFormBtn.disabled = false;
-
-    this.$taskFormInput.value = '';
-    this.$taskFormBtn.innerHTML = 'Add Task';
-  }
-
-  async addTask(task) {
-    this.disableTaskForm();
-
-    const newTask = await addTaskToApi(task);
-    newTask && this.$tableTbody.appendChild(TaskItem(newTask));
-
-    this.data = [...this.data, newTask];
-
-    this.enableTaskForm();
-  }
-
-  addTaskToTable(task) {
-    const newTaskItem = TaskItem(task);
-    this.$tableTbody.appendChild(newTaskItem);
-    this.$taskFormInput.value = '';
-  }
-
-  handleAddTask() {
-    this.$taskForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const task = { title: this.$taskFormInput.value };
-      this.addTask(task);
-    });
-  }
-
-  async fillTasksTable() {
-    const currentTasks = await getDataFromApi();
-    currentTasks.forEach((task, index) => {
-      this.addTaskToTable(task, index + 1);
-    });
-
-    this.data = currentTasks;
   }
 
   setActiveTask() {
@@ -143,8 +104,8 @@ class PomodoroApp {
   }
 
   init() {
-    this.fillTasksTable();
-    this.handleAddTask();
+    useTaskResource(this);
+    TaskForm(this);
     this.handleStart();
     this.handlePause();
   }
