@@ -19,9 +19,11 @@ class PomodoroApp {
       taskFormInput,
       timerButtonsSelector,
       skipButtonSelector,
+      alarmAudioSelector,
     } = options;
 
     this.data = [];
+    this.pomodoroCount = 0;
 
     this.$taskList = document.querySelector(taskListSelector);
     this.$taskForm = document.querySelector(taskFormSelector);
@@ -32,7 +34,7 @@ class PomodoroApp {
     this.$pauseButton = document.querySelector(pauseButtonSelector);
     this.$timerButtons = document.querySelector(timerButtonsSelector);
     this.$skipButton = document.querySelector(skipButtonSelector);
-
+    this.$alarmAudio = document.querySelector(alarmAudioSelector);
     this.currentTask = null;
 
     this.$timerEl = document.querySelector(timerSelector);
@@ -83,6 +85,7 @@ class PomodoroApp {
   }
 
   endPomdoroSession() {
+    this.$alarmAudio.play();
     clearInterval(this.currentInterval);
     this.currentTask.completed = true;
     updateTaskFromApi(this.currentTask);
@@ -98,7 +101,7 @@ class PomodoroApp {
       const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
 
       this.updateTimerTitle(
-        `Chill - ${zeroPrefixForNumbers(minutes)}:${zeroPrefixForNumbers(
+        `Break - ${zeroPrefixForNumbers(minutes)}:${zeroPrefixForNumbers(
           seconds
         )}`
       );

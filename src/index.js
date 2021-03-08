@@ -12,6 +12,7 @@ let pomodoroApp = new PomodoroApp({
   timerSelector: '#timer',
   timerButtonsSelector: '#timer-buttons',
   skipButtonSelector: '#skip',
+  alarmAudioSelector: '#a-alarm',
 });
 
 pomodoroApp.init();

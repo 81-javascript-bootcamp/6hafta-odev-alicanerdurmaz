@@ -7,6 +7,11 @@ const TimerControl = (context) => {
   });
 
   context.$pauseButton.addEventListener('click', () => {
+    context.$timerEl.innerHTML = context.$timerEl.innerHTML.replace(
+      'Working',
+      'Paused'
+    );
+
     clearInterval(context.currentInterval);
     toggleStartPauseButtons('pause');
   });
