@@ -13,6 +13,9 @@
     <nav class="navbar navbar-dark bg-dark">
       <div class="container-fluid">
         <a class="navbar-brand app-title" href="#">POMODORO APP</a>
+        <h3 class="navbar-brand app-title">
+          Pomodoro Count : <span id="pomodoro-count">0</span>
+        </h3>
       </div>
     </nav>
 
@@ -59,7 +62,12 @@
 
       <form class="row g-3" id="task-form">
         <div class="col-auto">
-          <input type="text" class="form-control" placeholder="Task Title" />
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Task Title"
+            required
+          />
         </div>
         <div class="col-auto">
           <button type="submit" class="btn btn-primary mb-3">Add Task</button>

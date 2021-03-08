@@ -20,6 +20,7 @@ class PomodoroApp {
       timerButtonsSelector,
       skipButtonSelector,
       alarmAudioSelector,
+      pomodoroCountSelector,
     } = options;
 
     this.data = [];
@@ -35,6 +36,7 @@ class PomodoroApp {
     this.$timerButtons = document.querySelector(timerButtonsSelector);
     this.$skipButton = document.querySelector(skipButtonSelector);
     this.$alarmAudio = document.querySelector(alarmAudioSelector);
+    this.$pomodoroCountText = document.querySelector(pomodoroCountSelector);
     this.currentTask = null;
 
     this.$timerEl = document.querySelector(timerSelector);
@@ -89,6 +91,8 @@ class PomodoroApp {
     clearInterval(this.currentInterval);
     this.currentTask.completed = true;
     updateTaskFromApi(this.currentTask);
+
+    this.incrementPomodoroCountAndUpdateFromUi();
   }
 
   startPomodoroBreak() {
@@ -119,6 +123,10 @@ class PomodoroApp {
 
   updateTimerTitle(text) {
     this.$timerEl.innerHTML = text;
+  }
+  incrementPomodoroCountAndUpdateFromUi() {
+    this.pomodoroCount++;
+    this.$pomodoroCountText.innerHTML = this.pomodoroCount;
   }
 
   init() {
