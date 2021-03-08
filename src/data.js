@@ -31,7 +31,6 @@ export const deleteTaskFromApi = async (id) => {
 };
 
 export const updateTaskFromApi = async (task) => {
-  console.log(task);
   return await fetcher(
     `${TASKS_API_BASE_URL}/${task.id}`,
     'put',

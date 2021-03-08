@@ -1,5 +1,5 @@
 import { updateTaskFromApi } from './data';
-import { POMODORO_BREAK, POMODORO_WORK } from './constans';
+import { POMODORO_BREAK, POMODORO_WORK, POMODORO_LONG_BREAK } from './constans';
 import { getNow, addMinutes, getTimeRemaining } from './helpers/date';
 import { zeroPrefixForNumbers } from './helpers/zeroPrefixForNumbers';
 
@@ -105,7 +105,9 @@ class PomodoroApp {
     toggleTimerButtons(this, false);
 
     const now = getNow();
-    const breakEndDate = addMinutes(now, POMODORO_BREAK);
+    const breakTime =
+      this.pomodoroCount % 4 === 0 ? POMODORO_LONG_BREAK : POMODORO_BREAK;
+    const breakEndDate = addMinutes(now, breakTime);
 
     this.breakInterval = setInterval(() => {
       const { total, minutes, seconds } = getTimeRemaining(breakEndDate);
