@@ -46,8 +46,13 @@ class PomodoroApp {
   }
 
   setActiveTask() {
-    const allTasks = document.querySelectorAll('.task');
-    allTasks.forEach(($taskItem) => ($taskItem.style.background = '#fff'));
+    if (this.currentTask) {
+      const currentActiveTaskElement = document.querySelector(
+        `tr[data-taskId = 'task${this.currentTask.id}']`
+      );
+      currentActiveTaskElement.classList.remove('activeTask');
+      currentActiveTaskElement.classList.add('completedTask');
+    }
 
     this.currentTask = this.data.find((task) => !task.completed);
 
@@ -55,7 +60,7 @@ class PomodoroApp {
       `tr[data-taskId = 'task${this.currentTask.id}']`
     );
 
-    targetEl.style.background = 'red';
+    targetEl.classList.add('activeTask');
   }
 
   createNewTimer() {
@@ -88,6 +93,7 @@ class PomodoroApp {
 
   endPomdoroSession() {
     this.$alarmAudio.play();
+
     clearInterval(this.currentInterval);
     this.currentTask.completed = true;
     updateTaskFromApi(this.currentTask);

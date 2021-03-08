@@ -49,7 +49,7 @@
 }
 
 .activeTask {
-  background: red;
+  background: #f5c0c0;
 }
 
 .completedTask {
