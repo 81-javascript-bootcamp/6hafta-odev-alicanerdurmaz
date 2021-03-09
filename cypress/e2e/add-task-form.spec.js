@@ -12,7 +12,6 @@ describe('Add Task Form', () => {
         delayMs: 1000,
       })
       .as('addTask')
-      .as('deleteTask')
       .visit('/')
       .wait('@getTasks')
       .get('.form-control')
