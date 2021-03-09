@@ -1,23 +1,30 @@
 import { deleteTaskFromApi } from '../data';
 import TrashIcon from './TrashIcon';
 
+async function taskButtonClickHandler(btn, id, elementToRemove) {
+  btn.disabled = true;
+  btn.classList.add('spinner-grow');
+
+  const result = await deleteTaskFromApi(id);
+
+  btn.disabled = false;
+  btn.classList.remove('spinner-grow');
+
+  if (result) {
+    document.removeEventListener('click', taskButtonClickHandler);
+    elementToRemove.remove();
+  }
+}
+
 const DeleteTaskButton = (id, elementToRemove) => {
   const button = document.createElement('button');
 
   button.innerHTML = TrashIcon();
   button.classList.add('trash-icon');
 
-  button.addEventListener('click', async () => {
-    button.disabled = true;
-    button.classList.add('spinner-grow');
-
-    const result = await deleteTaskFromApi(id);
-
-    button.disabled = false;
-    button.classList.remove('spinner-grow');
-
-    result && elementToRemove.remove();
-  });
+  button.addEventListener('click', () =>
+    taskButtonClickHandler(button, id, elementToRemove)
+  );
 
   return button;
 };
