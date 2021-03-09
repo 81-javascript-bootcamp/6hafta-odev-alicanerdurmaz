@@ -20,7 +20,6 @@ describe('Timer', () => {
   const endDate = addMinutes(now, POMODORO_WORK);
   const { total, minutes, seconds } = getTimeRemaining(endDate);
 
-  console.log(total, minutes, seconds);
   const tasksData = [
     { id: '1', title: 'JavaScript', completed: false },
     { id: '2', title: 'TypeScript', completed: false },
