@@ -17,16 +17,16 @@ describe('Add Task Form', () => {
       .wait('@getTasks')
       .get('.form-control')
       .type(TASK_TITLE)
-      .get(':nth-child(2) > .btn')
+      .get('#task-form-submit')
       .click()
       .get('.form-control')
       .should('be.disabled')
-      .get(':nth-child(2) > .btn')
+      .get('#task-form-submit')
       .should('be.disabled')
       .wait('@addTask')
       .get('.form-control')
       .should('be.not.disabled')
-      .get(':nth-child(2) > .btn')
+      .get('#task-form-submit')
       .should('be.not.disabled');
   });
 });

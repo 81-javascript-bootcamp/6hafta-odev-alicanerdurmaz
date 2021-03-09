@@ -20,7 +20,7 @@ describe('Task Crud', () => {
       .wait('@getTasks')
       .get('.form-control')
       .type(TASK_TITLE)
-      .get(':nth-child(2) > .btn')
+      .get('#task-form-submit')
       .click()
       .wait('@addTask')
       .get('.row-title')
