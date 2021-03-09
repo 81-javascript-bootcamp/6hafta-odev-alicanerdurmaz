@@ -21,18 +21,15 @@ describe('Task Crud', () => {
   });
 
   it('can add task', () => {
-    cy.get('.form-control')
-      .type(TASK_TITLE)
-      .get('#task-form-submit')
-      .click()
+    cy.typeTo('.form-control', TASK_TITLE)
+      .clickTo('#task-form-submit')
       .wait('@addTask')
       .get('.row-title')
       .contains(TASK_TITLE);
   });
 
   it('can delete task', () => {
-    cy.get('.trash-icon')
-      .click()
+    cy.clickTo('.trash-icon')
       .wait('@deleteTask')
       .get('.row-title')
       .should('not.exist');

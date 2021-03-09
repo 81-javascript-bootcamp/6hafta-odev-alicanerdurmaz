@@ -32,8 +32,7 @@ describe('Timer', () => {
       .clock()
       .visit('/')
       .wait('@getTasks')
-      .get('#start')
-      .click();
+      .clickTo('#start');
   });
 
   it('timer tick works', () => {
@@ -50,8 +49,7 @@ describe('Timer', () => {
     cy.tick(total + 1000)
       .get('#timer')
       .contains(/break/i)
-      .get('#skip')
-      .click()
+      .clickTo('#skip')
       .tick(2000)
       .get('#timer')
       .contains(tasksData[1].title);

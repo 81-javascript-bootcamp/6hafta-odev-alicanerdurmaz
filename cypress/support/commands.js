@@ -23,3 +23,19 @@
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite("visit", (originalFn, url, options) => { ... })
+
+Cypress.Commands.add('isDisabled', (selector) => {
+  cy.get(selector).should('be.disabled');
+});
+
+Cypress.Commands.add('isNotDisabled', (selector) => {
+  cy.get(selector).should('be.not.disabled');
+});
+
+Cypress.Commands.add('clickTo', (selector) => {
+  cy.get(selector).click();
+});
+
+Cypress.Commands.add('typeTo', (selector, text) => {
+  cy.get(selector).type(text);
+});

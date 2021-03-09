@@ -16,14 +16,12 @@ describe('Start and Pause', () => {
   });
 
   it('star and pause button works properly', () => {
-    cy.get('#start')
-      .should('be.not.disabled')
-      .click()
-      .should('be.disabled')
-      .get('#pause')
-      .should('be.not.disabled')
-      .click()
-      .get('#start')
-      .should('be.not.disabled');
+    cy.isNotDisabled('#start')
+      .clickTo('#start')
+      .isDisabled('#start')
+      .isNotDisabled('#pause')
+      .clickTo('#pause')
+      .isNotDisabled('#start')
+      .isDisabled('#pause');
   });
 });

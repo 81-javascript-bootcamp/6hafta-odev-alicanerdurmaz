@@ -12,20 +12,20 @@ describe('Add Task Form', () => {
         delayMs: 1000,
       })
       .as('addTask')
+      .as('deleteTask')
+
       .visit('/')
       .wait('@getTasks')
-      .get('.form-control')
-      .type(TASK_TITLE)
-      .get('#task-form-submit')
-      .click()
-      .get('.form-control')
-      .should('be.disabled')
-      .get('#task-form-submit')
-      .should('be.disabled')
+
+      .typeTo('.form-control', TASK_TITLE)
+      .clickTo('#task-form-submit')
+
+      .isDisabled('.form-control')
+      .isDisabled('#task-form-submit')
+
       .wait('@addTask')
-      .get('.form-control')
-      .should('be.not.disabled')
-      .get('#task-form-submit')
-      .should('be.not.disabled');
+
+      .isNotDisabled('.form-control')
+      .isNotDisabled('#task-form-submit');
   });
 });
