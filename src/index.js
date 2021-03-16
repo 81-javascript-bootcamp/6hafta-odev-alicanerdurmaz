@@ -3,11 +3,17 @@ import './styles/main.css';
 import PomodoroApp from './app';
 
 let pomodoroApp = new PomodoroApp({
-  tableTbodySelector: '#table-tbody',
+  taskListSelector: '#table-tbody',
   taskFormSelector: '#task-form',
+  taskFormButton: '#task-form > div > button',
+  taskFormInput: '#task-form > div > input',
   startButtonSelector: '#start',
   pauseButtonSelector: '#pause',
   timerSelector: '#timer',
+  timerButtonsSelector: '#timer-buttons',
+  skipButtonSelector: '#skip',
+  alarmAudioSelector: '#a-alarm',
+  pomodoroCountSelector: '#pomodoro-count',
 });
 
 pomodoroApp.init();
